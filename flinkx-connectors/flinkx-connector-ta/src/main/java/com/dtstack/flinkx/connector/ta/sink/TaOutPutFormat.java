@@ -12,13 +12,13 @@ import com.dtstack.flinkx.connector.ta.converter.TaColumnConverter;
 import com.dtstack.flinkx.connector.ta.dto.EventDo;
 import com.dtstack.flinkx.connector.ta.dto.TaDataDo;
 import com.dtstack.flinkx.connector.ta.dto.UserDo;
-import com.dtstack.flinkx.connector.ta.util.CommonUtil;
 import com.dtstack.flinkx.connector.ta.util.CompressUtil;
 import com.dtstack.flinkx.connector.ta.util.HttpRequestUtil;
 import com.dtstack.flinkx.connector.ta.util.RetryerUtil;
 import com.dtstack.flinkx.exception.WriteRecordException;
 import com.dtstack.flinkx.outputformat.BaseRichOutputFormat;
 import com.github.rholder.retry.Retryer;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -32,9 +32,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ExecutorService;
 import java.util.stream.Collectors;
 
 public class TaOutPutFormat extends BaseRichOutputFormat {
@@ -55,7 +52,15 @@ public class TaOutPutFormat extends BaseRichOutputFormat {
         List<FieldConf> fieldConfList = taConf.getColumn();
         HashMap<String, Object> columnMap = new HashMap<>();
         for (int i = 0; i < taConf.getColumn().size(); i++) {
-            columnMap.put(fieldConfList.get(i).getName(), data[i]);
+            FieldConf fieldConf = fieldConfList.get(i);
+            String value = fieldConf.getValue();
+            String name = fieldConf.getName();
+            if (StringUtils.isBlank(value)) {
+                columnMap.put(name, data[i]);
+            } else {
+                columnMap.put(name, value);
+            }
+
         }
         TaDataDo taDataDo = null;
 
@@ -86,7 +91,14 @@ public class TaOutPutFormat extends BaseRichOutputFormat {
             List<FieldConf> fieldConfList = taConf.getColumn();
             HashMap<String, Object> columnMap = new HashMap<>();
             for (int i = 0; i < taConf.getColumn().size(); i++) {
-                columnMap.put(fieldConfList.get(i).getName(), data[i]);
+                FieldConf fieldConf = fieldConfList.get(i);
+                String value = fieldConf.getValue();
+                String name = fieldConf.getName();
+                if (StringUtils.isBlank(value)) {
+                    columnMap.put(name, data[i]);
+                } else {
+                    columnMap.put(name, value);
+                }
             }
             TaDataDo taDataDo = null;
 

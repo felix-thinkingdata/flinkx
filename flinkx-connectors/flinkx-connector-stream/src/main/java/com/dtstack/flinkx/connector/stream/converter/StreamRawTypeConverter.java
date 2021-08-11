@@ -69,7 +69,6 @@ public class StreamRawTypeConverter {
                 return DataTypes.TIMESTAMP_WITH_LOCAL_TIME_ZONE();
             case "BOOLEAN":
                 return DataTypes.BOOLEAN();
-
             default:
                 return DataTypes.STRING();
         }

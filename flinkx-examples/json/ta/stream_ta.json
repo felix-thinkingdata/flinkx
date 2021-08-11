@@ -20,6 +20,10 @@
               {
                 "name": "column1",
                 "type": "string"
+              },
+              {
+                "name": "column2",
+                "type": "int"
               }
             ],
             "sliceRecordCount": ["30"]
@@ -40,7 +44,7 @@
                 "type": "BIGINT"
               },
               {
-                "name": "#event_name",
+                "name": "name",
                 "type": "string"
               },
               {
@@ -50,6 +54,15 @@
               {
                 "name": "column01",
                 "type": "string"
+              },
+              {
+                "name": "column02",
+                "type": "string"
+              },
+              {
+                "name": "#event_name",
+                "type": "string",
+                "value": "flinkx01"
               }
             ],
             "print": true
