@@ -48,7 +48,7 @@ public class LocalTest {
 //        confProperties.setProperty("state.checkpoints.dir", "file:///ck");
         String userDir = System.getProperty("user.dir");
 
-        String jobPath = userDir + "/flinkx-local-test/src/main/demo/json/socket/socket_stream.json";
+        String jobPath = "/Users/felix/app/sourceWorkspace/flinkx/flinkx-examples/json/ta/stream_ta.json";
         String flinkxPluginPath = userDir + "/flinkxplugins";
         String s = "";
 
@@ -64,8 +64,8 @@ public class LocalTest {
             argsList.add(content);
 //            argsList.add("-flinkconf");
 //            argsList.add("/opt/dtstack/flink-1.12.2/conf/");
-//            argsList.add("-pluginRoot");
-//            argsList.add(flinkxPluginPath);
+            argsList.add("-pluginRoot");
+            argsList.add(flinkxPluginPath);
             argsList.add("-confProp");
             argsList.add(GsonUtil.GSON.toJson(confProperties));
             if(StringUtils.isNotBlank(s)){

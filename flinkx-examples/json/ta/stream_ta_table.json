@@ -31,7 +31,7 @@
             "column": [
               {
                 "name": "id",
-                "type": "id"
+                "type": "BIGINT"
               },
               {
                 "name": "name",
@@ -39,7 +39,7 @@
               },
               {
                 "name": "content",
-                "type": "bigint"
+                "type": "string"
               }
             ],
             "print": true
@@ -47,10 +47,10 @@
           "table": {
             "tableName": "sinkTable"
           },
-          "name": "streamwriter"
+          "name": "tawriter"
         },
         "transformer": {
-          "transformSql": "select id,name, count(1) from sourceTable where CHAR_LENGTH(name) < 50 and CHAR_LENGTH(content) < 50 group by id,name"
+          "transformSql": "select id,name, content from sourceTable where CHAR_LENGTH(name) < 50 and CHAR_LENGTH(content) < 50 "
         }
       }
     ],

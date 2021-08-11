@@ -14,43 +14,47 @@
                 "type": "string"
               },
               {
-                "name": "content",
+                "name": "time",
+                "type": "TIMESTAMP"
+              },
+              {
+                "name": "column1",
                 "type": "string"
               }
             ],
-            "sliceRecordCount": ["30"],
-            "permitsPerSecond": 1
-          },
-          "table": {
-            "tableName": "sourceTable"
+            "sliceRecordCount": ["30"]
           },
           "name": "streamreader"
         },
         "writer": {
           "parameter": {
+            "type": "track",
+            "pushUrl": "https://receiver-ta-dev.thinkingdata.cn/logbus",
+            "appid": "f5df3e2d0dc14cd1b602a7a1fa688f66",
+            "thread": 3,
+            "batchSize": 10,
+            "compress": "none",
             "column": [
               {
-                "name": "id",
-                "type": "id"
+                "name": "#account_id",
+                "type": "BIGINT"
               },
               {
-                "name": "name",
+                "name": "#event_name",
                 "type": "string"
               },
               {
-                "name": "content",
-                "type": "bigint"
+                "name": "#time",
+                "type": "TIMESTAMP"
+              },
+              {
+                "name": "column01",
+                "type": "string"
               }
             ],
             "print": true
           },
-          "table": {
-            "tableName": "sinkTable"
-          },
-          "name": "streamwriter"
-        },
-        "transformer": {
-          "transformSql": "select id,name, count(1) from sourceTable where CHAR_LENGTH(name) < 50 and CHAR_LENGTH(content) < 50 group by id,name"
+          "name": "tawriter"
         }
       }
     ],
