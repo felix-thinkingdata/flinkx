@@ -111,39 +111,7 @@ public class EventDo extends TaDataDo {
             String key = entry.getKey();
             Object val = entry.getValue();
             if (!TaConstants.TA_SYSTEM_COLUMN_SET.contains(key)) {
-                if ("event_variable".equals(key)) {
-                    String valStr = null;
-                    try {
-                        if (val != null) {
-                            valStr = val.toString();
-                            if (StringUtils.isNotBlank(valStr)) {
-                                JSONObject jsonObject ;
-                                try{
-                                    jsonObject = JSON.parseObject(valStr);
-                                }catch(Exception e){
-                                    valStr = valStr.replaceAll("\\\\\\\\\\\\\"","\\\\\"");
-                                    valStr=valStr.replaceAll("\\\\\\\\\\\\","");
-                                    jsonObject = JSON.parseObject(valStr);
-                                }
-                                Iterator iter = jsonObject.entrySet().iterator();
-                                while (iter.hasNext()) {
-                                    Map.Entry entry1 = (Map.Entry) iter.next();
-                                    if(entry1.getKey()!=null&&entry1.getValue()!=null){
-                                        eventDo.propertyMap.put(entry1.getKey().toString(), entry1.getValue().toString());
-                                    }
-
-                                }
-                            }
-                        }
-
-                    } catch (Exception e) {
-                        System.out.println(val.toString());
-                        System.out.println(valStr);
-                        e.printStackTrace();
-                    }
-                } else {
                     eventDo.propertyMap.put(key, val);
-                }
             }
         }
 

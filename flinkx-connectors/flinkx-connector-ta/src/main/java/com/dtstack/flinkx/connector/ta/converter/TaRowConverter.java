@@ -1,30 +1,24 @@
 package com.dtstack.flinkx.connector.ta.converter;
 
-import org.apache.flink.table.data.GenericRowData;
 import org.apache.flink.table.data.RowData;
 import org.apache.flink.table.types.logical.DecimalType;
-import org.apache.flink.table.types.logical.LocalZonedTimestampType;
 import org.apache.flink.table.types.logical.LogicalType;
 import org.apache.flink.table.types.logical.LogicalTypeRoot;
 import org.apache.flink.table.types.logical.RowType;
 import org.apache.flink.table.types.logical.TimestampType;
 
+import com.dtstack.flinkx.converter.AbstractRowConverter;
+import com.dtstack.flinkx.converter.ISerializationConverter;
+import com.dtstack.flinkx.throwable.UnsupportedTypeException;
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.iceberg.shaded.org.apache.orc.storage.common.type.HiveDecimal;
 import org.apache.iceberg.shaded.org.apache.orc.storage.serde2.io.HiveDecimalWritable;
 
+import java.math.BigDecimal;
 import java.sql.Date;
-import java.sql.Time;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
-import com.dtstack.flinkx.converter.AbstractRowConverter;
-import com.dtstack.flinkx.converter.ISerializationConverter;
-import com.dtstack.flinkx.element.AbstractBaseColumn;
-import com.dtstack.flinkx.throwable.UnsupportedTypeException;
 
 public class TaRowConverter extends AbstractRowConverter<RowData, RowData, Object[], LogicalType> {
 
@@ -81,7 +75,15 @@ public class TaRowConverter extends AbstractRowConverter<RowData, RowData, Objec
                 return (rowData, index, data) -> data[index] = rowData.getLong(index);
             case DATE:
                 return (rowData, index, data) -> {
-                    data[index] = Date.valueOf(LocalDate.ofEpochDay(rowData.getInt(index)));
+                    DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+                    Object value = Date.valueOf(LocalDate.ofEpochDay(rowData.getInt(index)));
+                    String dateStr = null;
+                    try {
+                        dateStr = sdf.format(value);
+                    } catch (Exception e) {
+
+                    }
+                    data[index] = dateStr;
                 };
             case FLOAT:
                 return (rowData, index, data) -> data[index] = rowData.getFloat(index);
@@ -94,15 +96,24 @@ public class TaRowConverter extends AbstractRowConverter<RowData, RowData, Objec
                 return (rowData, index, data) -> {
                     int precision = ((DecimalType) type).getPrecision();
                     int scale = ((DecimalType) type).getScale();
-                    HiveDecimal hiveDecimal = HiveDecimal.create(rowData.getDecimal(index, precision, scale).toBigDecimal());
-                    hiveDecimal = HiveDecimal.enforcePrecisionScale(hiveDecimal, precision, scale);
-                    data[index] = new HiveDecimalWritable(hiveDecimal);
+                    BigDecimal bigDecimal = rowData.getDecimal(index, precision, scale).toBigDecimal();
+                    data[index] = bigDecimal;
                 };
             case BINARY:
             case VARBINARY:
                 return (rowData, index, data) -> data[index] = new BytesWritable(rowData.getBinary(index));
             case TIMESTAMP_WITHOUT_TIME_ZONE:
-                return (rowData, index, data) -> data[index] = rowData.getTimestamp(index, ((TimestampType)type).getPrecision()).toTimestamp();
+                return (rowData, index, data) -> {
+                    DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+                    Object value = rowData.getTimestamp(index, ((TimestampType) type).getPrecision()).toTimestamp();
+                    String dateStr = null;
+                    try {
+                        dateStr = sdf.format(value);
+                    } catch (Exception e) {
+
+                    }
+                    data[index] = dateStr;
+                };
             case INTERVAL_DAY_TIME:
             case INTERVAL_YEAR_MONTH:
             case ARRAY:
