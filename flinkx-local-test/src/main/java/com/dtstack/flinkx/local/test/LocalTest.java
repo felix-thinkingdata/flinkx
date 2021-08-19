@@ -48,8 +48,8 @@ public class LocalTest {
 //        confProperties.setProperty("state.checkpoints.dir", "file:///ck");
         String userDir = System.getProperty("user.dir");
 
-        //String jobPath = "/Users/felix/app/sourceWorkspace/flinkx/flinkx-examples/json/ta/stream_ta.json";
-        String jobPath="/Users/felix/app/sourceWorkspace/flinkx/flinkx-examples/sql/ta/stream_ta.sql";
+       String jobPath = "/Users/felix/app/sourceWorkspace/flinkx/flinkx-examples/json/ta/kafka_ta.json";
+        //String jobPath="/Users/felix/app/sourceWorkspace/flinkx/flinkx-examples/sql/ta/stream_ta.sql";
         String flinkxPluginPath = userDir + "/flinkxplugins";
         String s = "";
 

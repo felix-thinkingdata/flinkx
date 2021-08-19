@@ -19,7 +19,7 @@ CREATE TABLE sink
 (
     `#account_id`        String,
     name      STRING,
-    money     double,
+    money     DECIMAL(32, 2),
     `#time`   timestamp,
     age       bigint,
     datethree timestamp,
@@ -37,4 +37,4 @@ CREATE TABLE sink
 
 insert into sink
 select cast(id as string),name,money,dateone,age,datethree,datesix,datenigth,'testlog'
-from source;
+from source where ;

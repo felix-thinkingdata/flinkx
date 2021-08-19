@@ -1,0 +1,93 @@
+{
+  "job": {
+    "content": [
+      {
+        "reader": {
+          "parameter": {
+            "topic": "flinkx-test",
+            "mode": "latest-offset",
+            "timestamp": 1000,
+            "offset": "EARLIEST",
+            "groupId": "flinkx-group",
+            "codec": "json",
+            "column": [
+              {
+                "name": "id",
+                "type": "int"
+              },
+              {
+                "name": "name",
+                "type": "String"
+              },
+              {
+                "name": "datatime",
+                "type": "TIMESTAMP"
+              },
+              {
+                "name": "age",
+                "type": "bigint"
+              },
+              {
+                "name": "datethree",
+                "type": "TIMESTAMP"
+              }
+            ],
+            "consumerSettings": {
+              "bootstrap.servers": "ta1:9092,ta2:9092,ta3:9092",
+              "auto.commit.enable": "false"
+            }
+          },
+          "name": "kafkasource"
+        },
+        "writer": {
+          "parameter": {
+            "type": "track",
+            "pushUrl": "http://ta1:8991/logbus",
+            "appid": "1a9960b4b5b642809b6b5e3814bb5b02",
+            "thread": 3,
+            "batchSize": 10,
+            "compress": "none",
+            "column": [
+              {
+                "name": "#account_id",
+                "type": "BIGINT"
+              },
+              {
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "name": "#time",
+                "type": "TIMESTAMP"
+              },
+              {
+                "name": "column01",
+                "type": "string"
+              },
+              {
+                "name": "column02",
+                "type": "string"
+              },
+              {
+                "name": "#event_name",
+                "type": "string",
+                "value": "flinkx01"
+              }
+            ]
+          },
+          "name": "tawriter"
+        }
+      }
+    ],
+    "setting": {
+      "restore": {
+        "isRestore": true,
+        "isStream": true
+      },
+      "speed": {
+        "readerChannel": 1,
+        "writerChannel": 1
+      }
+    }
+  }
+}

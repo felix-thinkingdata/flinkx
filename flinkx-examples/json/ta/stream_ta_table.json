@@ -44,9 +44,7 @@
             ],
             "print": true
           },
-          "table": {
-            "tableName": "sinkTable"
-          },
+
           "name": "tawriter"
         },
         "transformer": {
